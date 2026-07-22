@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Code Translator</title>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <h1>Code Translator</h1>
   <p>Paste code, then pick who you're explaining it to.</p>
+  <div id="mode">
+    <label><input type="radio" name="mode" value="code" checked> Explain code</label>
+    <label><input type="radio" name="mode" value="diff"> Explain a diff</label>
+  </div>
 
   <textarea id="code" rows="12" cols="80" placeholder="Paste your code here..."></textarea>
 

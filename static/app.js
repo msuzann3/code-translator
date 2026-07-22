@@ -1,4 +1,4 @@
-// Grab the three page elements to work with
+// Grab the page elements to work with
 const codeBox = document.getElementById("code");
 const output = document.getElementById("output");
 const buttons = document.querySelectorAll("#buttons button");
@@ -11,6 +11,13 @@ buttons.forEach(function (button) {
   });
 });
 
+// Turn all buttons on or off together (so you can't fire two requests at once)
+function setButtonsDisabled(disabled) {
+  buttons.forEach(function (button) {
+    button.disabled = disabled;
+  });
+}
+
 // Send the code to the Flask server and show the answer
 async function translate(audience) {
   const code = codeBox.value;
@@ -20,14 +27,30 @@ async function translate(audience) {
     return;
   }
 
+  // Read which mode radio button is currently selected
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+
   output.textContent = "Thinking...";
+  setButtonsDisabled(true);
 
-  const response = await fetch("/translate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ code: code, audience: audience }),
-  });
+  try {
+    const response = await fetch("/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: code, audience: audience, mode: mode }),
+    });
 
-  const data = await response.json();
-  output.textContent = data.explanation;
+    const data = await response.json();
+
+    if (!response.ok) {
+      output.textContent = data.error || "Something went wrong. Please try again.";
+      return;
+    }
+
+    output.textContent = data.explanation;
+  } catch (error) {
+    output.textContent = "Couldn't reach the server. Is it still running?";
+  } finally {
+    setButtonsDisabled(false);
+  }
 }

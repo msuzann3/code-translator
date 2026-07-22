@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 from anthropic import Anthropic
 
@@ -27,7 +27,9 @@ AUDIENCE_PROMPTS = {
         "cost, or risk. No technical detail."
     ),
 }
-
+@app.route("/")
+def home():
+    return send_from_directory("static", "index.html")
 @app.route("/translate", methods=["POST"])
 def translate():
     data = request.get_json()

@@ -10,4 +10,4 @@ JavaScript, and the Anthropic API, with AI pair-programming used openly
 and deliberately.
 
 ## Status
-In development. Follow the pull requests to watch it come together.
+Complete.

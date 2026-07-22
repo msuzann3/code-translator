@@ -1,4 +1,3 @@
-import os
 from flask import Flask, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 from anthropic import Anthropic
@@ -51,7 +50,14 @@ def home():
 
 @app.route("/translate", methods=["POST"])
 def translate():
-    data = request.get_json()
+    try:
+        data = request.get_json()
+    except Exception:
+        return jsonify({"error": "Invalid JSON in request."}), 400
+
+    if data is None:
+        return jsonify({"error": "No JSON data provided."}), 400
+
     code = data.get("code", "")
     audience = data.get("audience", "engineer")
     mode = data.get("mode", "code")

@@ -28,7 +28,12 @@ async function translate(audience) {
   }
 
   // Read which mode radio button is currently selected
-  const mode = document.querySelector('input[name="mode"]:checked').value;
+  const modeElement = document.querySelector('input[name="mode"]:checked');
+  if (!modeElement) {
+    output.textContent = "Error: mode selection not found.";
+    return;
+  }
+  const mode = modeElement.value;
 
   output.textContent = "Thinking...";
   setButtonsDisabled(true);
